@@ -45,6 +45,39 @@ describe("calculatePrice", () => {
   describe.each([
     [2020, 300],
     [2021, 300],
+    [2022, 300],
+  ] as const)("BlurayPackage (%i, %i)", (year: ServiceYear, expectedPrice) => {
+    test("price matches requirements", () => {
+      const onlyVideoRecording = calculatePrice(["VideoRecording"], year);
+      const withBlurayPackage = calculatePrice(
+        ["VideoRecording", "BlurayPackage"],
+        year
+      );
+      const result =
+        withBlurayPackage.finalPrice - onlyVideoRecording.finalPrice;
+      expect(result).toEqual(expectedPrice);
+    });
+  });
+
+  describe.each([
+    [2020, 400],
+    [2021, 400],
+    [2022, 400],
+  ] as const)("TwoDayEvent (%i, %i)", (year: ServiceYear, expectedPrice) => {
+    test("price matches requirements", () => {
+      const onlyVideo = calculatePrice(["VideoRecording"], year);
+      const withTwoDayEvent = calculatePrice(
+        ["VideoRecording", "TwoDayEvent"],
+        year
+      );
+      const result = withTwoDayEvent.finalPrice - onlyVideo.finalPrice;
+      expect(result).toEqual(expectedPrice);
+    });
+  });
+
+  describe.each([
+    [2020, 300],
+    [2021, 300],
     [2022, 0],
   ] as const)(
     "photographyWithWeddingSessionPrice (%i increase by %i)",
